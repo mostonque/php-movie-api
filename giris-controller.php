@@ -6,7 +6,7 @@ require 'users.php';
 
 if(isset($_SESSION['yonetici_adi']))
 {
-    include_once 'admin.php';
+    header('location:admin.php');
 }else{
     include_once 'admin-login.php';
 }

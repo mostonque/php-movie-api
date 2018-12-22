@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,116 +14,17 @@
  
 </head>
 <body>
-    
 
+<?php
+include_once 'adminController.php';
 
-
-    <?php
-    require_once './db/baglan.php';
-
-    if(isset($_POST['ara']))
-    {
-        $url=dataControl($_POST['videoLink']);
-        if(empty($url))
-        {
-            $hata= 'Lütfen link giriniz';
-        }elseif(strlen($url)<43)
-        {
-            $hata= 'Girilen link olaması gerekenden kısadır. Lütfen kontrol ediniz!';
-        }elseif (strlen($url)>44){
-            $hata= 'Girilen link olması gerekenden uzundur. Lütfen kontrol ediniz!';
-        }
-        else{
-            $apiKey='AIzaSyCXZs_BvOIkLuMRK-gxxlht15CJNGrp-Hk';
-            $urlid=videoİd($url); 
-            $urlid=substr($urlid,2,11);
-            $link='https://www.googleapis.com/youtube/v3/videos?id='.$urlid.'&key='.$apiKey.'&fields=items(id,snippet(channelId,title,thumbnails,description,categoryId),statistics)&part=snippet,statistics';
-            $link=json_decode(file_get_contents($link),true);          
-        };
-        if(isset($link))
-        {
-            $channelID=dataControl(arraydeBul($link,'channelId'));
-            $videoId=dataControl(arraydeBul($link,'id'));
-            $title=dataControl(arraydeBul($link,'title'));
-            $aciklama=dataControl(arraydeBul($link,'description'));
-            $imgUrl=dataControl($link['items'][0]['snippet']['thumbnails']['high']['url']);
-            $goruntulenme_sayisi=dataControl($link['items'][0]['statistics']['viewCount']);
-            $like_sayisi=dataControl($link['items'][0]['statistics']['likeCount']);
-            $disLike_sayisi=dataControl($link['items'][0]['statistics']['dislikeCount']);
-            $yorum_sayisi=dataControl($link['items'][0]['statistics']['commentCount']);
-        }
-    }elseif(isset($_POST['kayit']))
-    {
-       if(isset($_POST['ara']) && !empty($_POST['videoLink']))
-       {
-           $sorgu=$db->prepare("İNSERT İNTO videolar SET 
-           videoId= ?,
-           title= ?,
-           aciklama= ?,
-           imgUrl= ?,
-           goruntulenme_sayisi= ?,
-           like_sayisi= ?,
-           disLike_sayisi= ?,
-           yorum_sayisi= ?");
-           $insert=$sorgu->execute([
-            $videoId,$title,$aciklama,$imgUrl,$goruntulenme_sayisi,$like_sayisi,$disLike_sayisi,$yorum_sayisi
-           ]);
-           if($insert)
-           {
-            
-
-           }else{
-
-           }
-       }
-
-
-    }
-
-
-
-
-        function dataControl($data)
-        {
-            $data=trim($data);
-            $data=htmlspecialchars($data);
-            return $data;
-        }
-
-        function arraydeBul($array,$anahtar)
-        {
-                
-                foreach($array as $key=>$val)
-                {
-                if($key===$anahtar)
-                {
-                    return $val;
-                }elseif(is_array($val))
-                {
-                    $t=arraydeBul($val,$anahtar);
-                    return $t;
-                }
-                
-                }              
-            
-            return "ARRAYDE <u> $anahtar </u> ANAHTARI BULUNAMADI! ";
-        }
-        
-        function videoİd ($url)
-        {
-            $id=parse_url($url,PHP_URL_QUERY);
-            return $id;
-        }
-    ?>
-    
-
-
+?>
     
 <div class="container-fluid " >
         <div class="col-md-3 d-inline-block" style="float:none; margin:1% 1% 1% 34%; text-align:center; background-color:#dfe8e8; padding:0.3%"> 
                 <form action="" method="post">
                     Youtube Video Link'ini Giriniz: <br>
-                    <input type="text"  name="videoLink" autocomplete="off" <?php isset($url)?print $url : $url="" ?> />
+                    <input type="text"  name="videoLink" autocomplete="off" value="<?php isset($_SESSION['videoLink'])?print $_SESSION['videoLink'] : $_SESSION['videoLink']=""; ?>" />
                    
                     <button class="btn btn-info"  name="ara" type="submit">ARA</button> &emsp;&emsp;|<a href="cikis.php">[ÇIKIŞ]</a> <br>
                     <?php
@@ -142,11 +44,11 @@
 <div class="container-fluid videoAlan" >
     <div class="col-md-6 d-inline-block " >
         <div class="col-md-12">
-            <h3 class="title"> <?php isset($title) ? print $title : $title=""; ?> </h3> 
+            <h3 class="title"> <?php isset($_SESSION['title']) ? print $_SESSION['title'] : $_SESSION['title']=""; ?> </h3> 
             
         </div>   
         <div class="col-md-12 " style="margin:5% 0% 2% 9%" >
-            <img src=" <?php isset($imgUrl) ? print $imgUrl : $imgUrl=""; ?> " width="80%"; height="30%";> 
+            <img src=" <?php isset($_SESSION['imgUrl']) ? print $_SESSION['imgUrl'] : $_SESSION['imgUrl']=""; ?> " width="80%"; height="30%";> 
             
         </div>
         <div class="col-md-12" >
@@ -162,10 +64,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope="row"> <?php isset($goruntulenme_sayisi) ? print $goruntulenme_sayisi :$goruntulenme_sayisi=""; ?> </th>
-                        <td><?php isset($like_sayisi)? print $like_sayisi  : $like_sayisi="";?></td>
-                        <td><?php isset($disLike_sayisi)? print $disLike_sayisi : $disLike_sayisi="";?></td>
-                        <td><?php isset($yorum_sayisi)? print $yorum_sayisi : $yorum_sayisi="";?></td>
+                        <td scope="row"> <?php isset($_SESSION['goruntulenme_sayisi']) ? print $_SESSION['goruntulenme_sayisi'] :$_SESSION['goruntulenme_sayisi']=""; ?> </th>
+                        <td><?php isset($_SESSION['like_sayisi'])? print $_SESSION['like_sayisi']  : $_SESSION['like_sayisi']="";?></td>
+                        <td><?php isset($_SESSION['disLike_sayisi'])? print $_SESSION['disLike_sayisi'] : $_SESSION['disLike_sayisi']="";?></td>
+                        <td><?php isset($_SESSION['yorum_sayisi'])? print $_SESSION['yorum_sayisi'] : $_SESSION['yorum_sayisi']="";?></td>
                     </tr>
                 </tbody>
             </table>
@@ -181,15 +83,15 @@
         echo '<p style="margin-top:5%; border:1px solid #5c9696; padding:2%">';
         if(isset($_POST['ara'])&& !empty($_POST['videoLink']))
         {
-            if(isset($aciklama) && !empty($aciklama)){
-                if(strlen($aciklama)>255)
+            if(isset($_SESSION['aciklama']) && !empty($_POST['videoLink'])){
+                if(strlen($_SESSION['aciklama'])>255)
                 {
-                    print substr($aciklama,0,255).'...';
+                    print substr($_SESSION['aciklama'],0,255).'...';
                 }else{
-                    print $aciklama.'asdasdas';
+                    print $_SESSION['aciklama'];
                 }
-            }else if(empty($aciklama)){
-                print'Bu videonun açıklaması bulunamadı.';    
+            }else if(empty($_SESSION['aciklama'])){
+                $_SESSION['aciklama']="";
             }
         }
         echo '</p>';
@@ -201,6 +103,7 @@
 
 
 </div>
+
 
 
 </body>

@@ -2,7 +2,7 @@
 session_start();
 session_destroy();
 
-header('Location:giris-controller.php');
+header('location:index.php');
 
 
 ?>

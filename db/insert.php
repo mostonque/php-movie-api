@@ -2,7 +2,7 @@
 session_start();
 if(!$_SESSION['yonetici_adi'])
 {
-    header('location:index.php');
+    header('location:../index.php');
 }
 ?>
 <?php
@@ -22,7 +22,6 @@ function trimAciklama($data){
       return $data;
     }
 }
-
 $query = $db->prepare("INSERT INTO videolar SET
 videoId=?,
 title=?,
@@ -48,5 +47,5 @@ if($insert){
     print 'HATA! Bu video daha önceden veri tabanına kaydedilmiştir.';
 }
 ?>
-&emsp;&emsp;<a href="../index.php">ANASAYFA</a> <a href="../cikis.php">[ÇIKIŞ]</a><br>
+&emsp;&emsp;<a href="../index.php" >ANASAYFA</button> <a href="../cikis.php">[ÇIKIŞ]</a><br>
 

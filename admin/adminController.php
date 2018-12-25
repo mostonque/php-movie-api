@@ -14,7 +14,7 @@ if(!$_SESSION['yonetici_adi'])
         $url=dataControl($_POST['videoLink']);
         if(empty($url))
         {
-            $hata= 'Lütfen link giriniz';
+            $hata= 'Lütfen Bir youtube videosu link\'i giriniz...';
         }elseif(strlen($url)<43)
         {
             $hata= 'Girilen link olaması gerekenden kısadır. Lütfen kontrol ediniz!';
@@ -45,9 +45,9 @@ if(!$_SESSION['yonetici_adi'])
     {
        if(isset($_SESSION['videoId']))
        {
-           header('Location:./db/insert.php');
+           header('Location:../db/insert.php');
        }else{
-           $hata='Lütfen Bir youtube videosu link\'i giriniz... ';
+           $hata='HATA! Lütfen geçerli bir youtube videosu link\'i giriniz... ';
        }
     }
 

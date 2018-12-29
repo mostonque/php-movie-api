@@ -1,13 +1,12 @@
 <?php
-if(!$_SESSION['yonetici_adi'])
-{
-    header('location:../index.php');
-}
 ?>
 <?php
-
+$host='localhost';
+$dbname='ytvideolar';
+$ID='serhat';
+$pw='';
     try {
-        $db = new PDO("mysql:host=localhost;dbname=ytvideolar;charset=utf8", "serhat", "");
+        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $ID, $pw);
    } catch ( PDOException $e ){
         print $e->getMessage();
    }

@@ -66,7 +66,6 @@
                 {
                     print substr($_SESSION['aciklama'],0,255).'...';    
                 }else{
-                    var_dump($_SESSION['aciklama']);
                     print $_SESSION['aciklama'];
                 }
             }else if($_SESSION['aciklama']==""){

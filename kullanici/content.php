@@ -4,7 +4,12 @@ div.col-sm-6{
 }
 .card-body{
     text-align:center;
-    background-color:rgb(130, 121, 109);
+    background-color:#70cbde;
+}
+.detay{
+    position:absolute;
+    left:90%;
+    top:65%;
 }
 
 </style>
@@ -15,31 +20,16 @@ include_once '../db/baglan.php';
 
 if(isset($_GET['search'])&&!empty($_GET['search']))
 {
-   $search=$_GET['search'];
-   $veri = $db->prepare("SELECT * FROM `videolar` WHERE title LIKE '$search%'"); 
+   $search=dataControl($_GET['search']);
+   $veri = $db->prepare("SELECT * FROM `videolar` WHERE title LIKE '%$search%'"); 
    $veri->execute();
    $dizi = $veri->fetchAll(PDO::FETCH_ASSOC);
-   
-}else{
-    $hata= 'HATA! ARAMA ALANINI DOLDURUNUZ.';
-}
-if(isset($dizi) && !empty($dizi))
+   $size=sizeof($dizi);
+}elseif(isset($_GET['search'])&& $_GET['search']=="")
 {
-    for($i=0;$i<=sizeof($dizi)-1;$i++)
-    {
-        var_dump(sizeof($dizi));
-        var_dump($dizi[$i]) ;
-    };
-    /*
-    $title=dizideBul($dizi,'title');
-    $img=dizideBul($dizi,'img');
-    $aciklama=dizideBul($dizi,'aciklama');
-    $izlenme=dizideBul($dizi,'izlenme');
-    $likeSayisi=dizideBul($dizi,'likeSayisi');
-    $dislike=dizideBul($dizi,'dislike');
-    $yorum=dizideBul($dizi,'yorum');
-    */
-}
+    $hata= 'Lütfen boş yapmayınız';
+}    
+
 
 
 
@@ -69,67 +59,109 @@ function dizideBul($array,$anahtar)
     
     return "ARRAYDE <u> $anahtar </u> ANAHTARI BULUNAMADI! ";
 }
-
+ 
 ?>
 
 
 <div class="container-fluid">
     <div class="row" style="margin:1% 0% 1% 42%">    
         <form action="" method="get">
-            <input type="text" name="search" autocomplete="off" >
+            <input type="text" name="search" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
             <button type="submit">Ara</button>
+            <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
         </form>
-    </div>
-</div>
-
-<div class="container-fluid">
-  <div class="row">
-  <div class="col-sm-1">
-  
-  </div>
-    <div class="col-sm-5">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title"><?php isset($title) ? print $title : $title="";  ?></h5>
-          <img src=" <?php isset($img) ? print $img : $img=""; ?> " width="50%"; height="34%";>
-          <div class="col-sm-8" style="margin: 2% 0% 2% 17%;" >
-          <p style="color:rgba(255, 254, 254, 0.61)" class="card-text"><?php isset($aciklama) && !$aciklama=="" ? print $aciklama.'...' :print "Bu videoya açıklama eklenmemiştir."; ?></p>
-          </div>
-          <table class="table table-Secondary table-sm " style="text-align: center;">
-                <thead>
-                <tr>
-                    <th scope="col">İzlenme sayısı</th>
-                    <th scope="col">Like sayısı</th>
-                    <th scope="col">Dislike sayısı</th>
-                    <th scope="col">Yorum Sayısı</th>
-                </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td scope="row"> <?php isset($izlenme) ? print $izlenme :print 0; ?> </th>
-                        <td><?php isset($likeSayisi)? print $likeSayisi  : print 0;?></td>
-                        <td><?php isset($dislike)? print $dislike : print 0;?></td>
-                        <td><?php isset($yorum)? print $yorum : print 0;?></td>
-                    </tr>
-                </tbody>
-            </table>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
+        
     </div>
     
-    <div class="col-sm-5">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-      </div>
-    </div>
 </div>
+
+<div class="container">
+  <div class="row">
+  <div class="col-md-12" style="height:5%; color:green; font-weight:bold;">
+    <?php isset($size)&& $size!=0?print $size.' Sonuç bulundu.':$size=0 ?>
+  </div>
+     <?php
+if(isset($_GET['search'])&&!empty($_GET['search']))
+{
+
+        if(isset($dizi) && !empty($dizi))
+    {    
+
+        for($i=0;$i<sizeof($dizi);$i++)
+        {
+            $id=dizideBul($dizi[$i],'videoId');
+            $title=dizideBul($dizi[$i],'title');
+            $img=dizideBul($dizi[$i],'img');
+            $aciklama=dizideBul($dizi[$i],'aciklama');
+            $izlenme=dizideBul($dizi[$i],'izlenme');
+            $likeSayisi=dizideBul($dizi[$i],'likeSayisi');
+            $dislike=dizideBul($dizi[$i],'dislike');
+            $yorum=dizideBul($dizi[$i],'yorum');
+            echo '<div class="col-md-12 " style="display:inherit; margin-bottom:2%">';
+                echo '<div class="col-md-3">';
+                    echo '<a href="">';    
+                        echo '<img src="'; 
+                            print $img;
+                        echo '"width="100%"; height="175px">';                    
+                    echo '</a>';
+                echo '</div>';
+
+                echo '<div class="col-md-9 " style="height: 18%; background-color:#eeeeee;">';
+                    echo '<p style="font-size:17px; font-weight:bold;  margin-top:1%;">';   print $title;   echo'</h5>';
+                    echo '<p style=" font-size:14px">'; isset($aciklama) && $aciklama!="" ? print $aciklama."..." : print '<b>Bu videoya ait açıklama bulunamadı!</b>'; echo'</p>';
+                    echo '<form action="../detay.php" method="post">';
+                        echo '<input  type="hidden" autocomplete="off"; name="id" value="'; print $id;  echo'">';    
+                        echo '<button type="submit" class="btn btn-secondary detay">'; 
+                            print 'DETAY';  
+                        echo '</button>';
+                    echo '</form>';
+                    echo '<table class="table bg-secondary table-sm" style="color:#ffc107; font-size:12px; text-align:center; width:83%;margin-top:1%;">';
+                    echo '<thead>';
+                    echo ' <tr>';
+                    echo '<th scope="col">';  print 'İZLENME SAYISI';    echo'</th>';
+                                echo '<th scope="col">'; print 'LİKE SAYISI';  echo '</th>';
+                                echo '<th scope="col">'; print 'DİSLİKE SAYISI';   echo '</th>';
+                                echo '<th scope="col">'; print 'YORUM SAYISI'; echo '</th>';
+                            echo '</tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
+                            echo '<tr>';
+                            echo '<td scope="row">'; isset($izlenme) ? print $izlenme : $izlenme=0;  echo '</th>';
+                            echo '<td>'; isset($izlenme) ? print $likeSayisi : $likeSayisi=0; echo '</td>';
+                            echo '<td>'; isset($dislike) ? print $dislike : $dislike=0; echo '</td>';
+                            echo '<td>';  isset($yorum) ? print $yorum : $yorum=0; echo '</td>';
+                            echo '</tr>';
+                            echo '</tbody>';
+                            echo '</table>';
+                echo '</div>';
+                             
+            echo '</div>';
+        };
+        
+    }else{
+       echo '<p style="color:red; font-weight:bold;">';
+            echo 'Sonuç bulunamadı';
+       echo '</p>';
+    }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+     ?>
+  </div>
 </div>
 
 <?php
 include_once 'footer.php';
+$db=null;
 ?>

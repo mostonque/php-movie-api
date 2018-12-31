@@ -12,7 +12,9 @@ div.col-sm-6{
     top:65%;
 }
 
+
 </style>
+
 <?php
 session_start();
 include_once 'header.php';
@@ -25,11 +27,7 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
    $veri->execute();
    $dizi = $veri->fetchAll(PDO::FETCH_ASSOC);
    $size=sizeof($dizi);
-}elseif(isset($_GET['search'])&& $_GET['search']=="")
-{
-    $hata= 'Lütfen boş yapmayınız';
-}    
-
+}
 
 
 
@@ -64,13 +62,18 @@ function dizideBul($array,$anahtar)
 
 
 <div class="container-fluid">
-    <div class="row" style="margin:1% 0% 1% 42%">    
-        <form action="" method="get">
-            <input type="text" name="search" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
-            <button type="submit">Ara</button>
+    <div class="row" style="margin:2% 0% 0% 0%">    
+        <div class="container bg-light" >
+        <form style="margin:1% 0% 1% 0%;" action="" method="get">
+            <div class="input-group col-md-5 ml-auto mr-auto">
+                <input type="text"  name="search"  class="form-control" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Ara</button>
+                </div>
+            </div>
             <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
         </form>
-        
+        </div>
     </div>
     
 </div>
@@ -78,7 +81,7 @@ function dizideBul($array,$anahtar)
 <div class="container">
   <div class="row">
   <div class="col-md-12" style="height:5%; color:green; font-weight:bold;">
-    <?php isset($size)&& $size!=0?print $size.' Sonuç bulundu.':$size=0 ?>
+    <?php isset($size)&& $size!=0?print"<p>".$size.' Sonuç bulundu.</p>':$size=0 ?>
   </div>
      <?php
 if(isset($_GET['search'])&&!empty($_GET['search']))
@@ -98,16 +101,14 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
             $dislike=dizideBul($dizi[$i],'dislike');
             $yorum=dizideBul($dizi[$i],'yorum');
             echo '<div class="col-md-12 " style="display:inherit; margin-bottom:2%">';
-                echo '<div class="col-md-3">';
-                    echo '<a href="">';    
+                echo '<div class="col-md-3">'; 
                         echo '<img src="'; 
                             print $img;
                         echo '"width="100%"; height="175px">';                    
-                    echo '</a>';
                 echo '</div>';
 
-                echo '<div class="col-md-9 " style="height: 18%; background-color:#eeeeee;">';
-                    echo '<p style="font-size:17px; font-weight:bold;  margin-top:1%;">';   print $title;   echo'</h5>';
+                echo '<div class="col-md-9 " style="height: 175px; background-color:#eeeeee;">';
+                    echo '<p style="font-size:17px; font-weight:bold;  margin-top:1%; margin-bottom:3px">';   print $title;   echo'</h5>';
                     echo '<p style=" font-size:14px">'; isset($aciklama) && $aciklama!="" ? print $aciklama."..." : print '<b>Bu videoya ait açıklama bulunamadı!</b>'; echo'</p>';
                     echo '<form action="../detay.php" method="post">';
                         echo '<input  type="hidden" autocomplete="off"; name="id" value="'; print $id;  echo'">';    
@@ -143,23 +144,103 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
             echo 'Sonuç bulunamadı';
        echo '</p>';
     }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-     ?>
+?>
   </div>
 </div>
+
+
+
+<?php
+
+$sayfa=$_GET['sayfa'];
+$sayfa_limiti=5;
+$row=$db->query("SELECT * FROM videolar")->rowCount();
+if(!isset($sayfa) || $sayfa=="" )
+{
+    $sayfa=0;
+}else{
+    $sayfa=($sayfa*$sayfa_limiti)-$sayfa_limiti;
+}
+$sorgu=$db->prepare("SELECT videoId,title,img,aciklama,izlenme,likeSayisi,dislike,yorum FROM videolar WHERE `no`   LIMIT " . $sayfa . "," . $sayfa_limiti);
+$sorgu->execute();
+$dbsearch= $sorgu->fetchAll(PDO::FETCH_ASSOC);
+$length=sizeof($dbsearch);
+$sayfa_sayisi=ceil($row / $sayfa_limiti );
+?>
+
+
+<div class="container">
+  <div class="row">
+  <div class="col-md-12" style="height:5%; color:green; font-weight:bold;">
+  <?php isset($length)&& $length!=0 && empty($_GET['search']) ? print $length.' adet video listelendi.':$length=0 ?>
+  </div>
+     <?php
+
+    if(!isset($_GET['search']) || empty($_GET['search']) )
+    {
+        
+        for($i=0;$i<$length;$i++)
+        {
+            
+            $id=dizideBul($dbsearch[$i],'videoId');
+            $title=dizideBul($dbsearch[$i],'title');
+            $img=dizideBul($dbsearch[$i],'img');
+            $aciklama=dizideBul($dbsearch[$i],'aciklama');
+            $izlenme=dizideBul($dbsearch[$i],'izlenme');
+            $likeSayisi=dizideBul($dbsearch[$i],'likeSayisi');
+            $dislike=dizideBul($dbsearch[$i],'dislike');
+            $yorum=dizideBul($dbsearch[$i],'yorum');
+            echo '<div class="col-md-12 " style="display:inherit; margin-bottom:2%">';
+                echo '<div class="col-md-3">';
+                        echo '<img src="'; 
+                            print $img;
+                        echo '"width="100%"; height="175px">';                    
+                echo '</div>';
+
+                echo '<div class="col-md-9 " style="height: 175px; background-color:#eeeeee;">';
+                    echo '<p style="font-size:17px; font-weight:bold;margin-top:1%; margin-bottom:3px">';   print $title;   echo'</p>';
+                    echo '<p style=" font-size:14px">'; isset($aciklama) && $aciklama!="" ? print $aciklama."..." : print '<b>Bu videoya ait açıklama bulunamadı!</b>'; echo'</p>';
+                    echo '<form action="../detay.php" method="post">';
+                        echo '<input  type="hidden" autocomplete="off"; name="id" value="'; print $id;  echo'">';    
+                        echo '<button type="submit" class="btn btn-secondary detay">'; 
+                            print 'DETAY';  
+                        echo '</button>';
+                    echo '</form>';
+                    echo '<table class="table bg-secondary table-sm" style="color:#ffc107; font-size:12px; text-align:center; width:83%;margin-top:1%;">';
+                    echo '<thead>';
+                    echo ' <tr>';
+                    echo '<th scope="col">';  print 'İZLENME SAYISI';    echo'</th>';
+                                echo '<th scope="col">'; print 'LİKE SAYISI';  echo '</th>';
+                                echo '<th scope="col">'; print 'DİSLİKE SAYISI';   echo '</th>';
+                                echo '<th scope="col">'; print 'YORUM SAYISI'; echo '</th>';
+                            echo '</tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
+                            echo '<tr>';
+                            echo '<td scope="row">'; isset($izlenme) ? print $izlenme : $izlenme=0;  echo '</th>';
+                            echo '<td>'; isset($izlenme) ? print $likeSayisi : $likeSayisi=0; echo '</td>';
+                            echo '<td>'; isset($dislike) ? print $dislike : $dislike=0; echo '</td>';
+                            echo '<td>';  isset($yorum) ? print $yorum : $yorum=0; echo '</td>';
+                            echo '</tr>';
+                            echo '</tbody>';
+                            echo '</table>';
+                echo '</div>';
+                             
+            echo '</div>';
+        };
+    }
+?>
+
+<?php
+for($i=1;$i<=$sayfa_sayisi;$i++)
+{
+    echo '<a href="?sayfa='; print $i;  echo'">';
+        print $i;
+    echo '</a>';
+}
+
+?>
 
 <?php
 include_once 'footer.php';

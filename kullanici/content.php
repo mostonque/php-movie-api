@@ -151,35 +151,40 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
 
 
 
-<?php
-
-$sayfa=$_GET['sayfa'];
-$sayfa_limiti=5;
-$row=$db->query("SELECT * FROM videolar")->rowCount();
-if(!isset($sayfa) || $sayfa=="" )
-{
-    $sayfa=0;
-}else{
-    $sayfa=($sayfa*$sayfa_limiti)-$sayfa_limiti;
-}
-$sorgu=$db->prepare("SELECT videoId,title,img,aciklama,izlenme,likeSayisi,dislike,yorum FROM videolar WHERE `no`   LIMIT " . $sayfa . "," . $sayfa_limiti);
-$sorgu->execute();
-$dbsearch= $sorgu->fetchAll(PDO::FETCH_ASSOC);
-$length=sizeof($dbsearch);
-$sayfa_sayisi=ceil($row / $sayfa_limiti );
-?>
 
 
 <div class="container">
   <div class="row">
   <div class="col-md-12" style="height:5%; color:green; font-weight:bold;">
-  <?php isset($length)&& $length!=0 && empty($_GET['search']) ? print $length.' adet video listelendi.':$length=0 ?>
+  <?php isset($length)&& $length!=0 && empty($_GET['search']) ? print $row.' tane videodan '. ($sayfa+1).'--'.($sayfa_limiti+$sayfa) .' arası video listeleniyor.':$length=0 ?>
   </div>
      <?php
 
     if(!isset($_GET['search']) || empty($_GET['search']) )
     {
         
+
+
+    $sayfa="";
+    if(isset($_GET['sayfa']))
+    {
+        $sayfa=$_GET['sayfa'];
+    }
+    $sayfa_limiti=3;
+    $row=$db->query("SELECT * FROM videolar")->rowCount();
+    if(!isset($sayfa) || $sayfa=="" )
+    {
+        $sayfa=0;
+    }else{
+        $sayfa=($sayfa*$sayfa_limiti)-$sayfa_limiti;
+    }
+
+    $sorgu=$db->prepare("SELECT videoId,title,img,aciklama,izlenme,likeSayisi,dislike,yorum FROM videolar WHERE `no`   LIMIT " . $sayfa . "," . $sayfa_limiti);
+    $sorgu->execute();
+    $dbsearch= $sorgu->fetchAll(PDO::FETCH_ASSOC);
+    $length=sizeof($dbsearch);
+    $sayfa_sayisi=ceil($row / $sayfa_limiti );
+
         for($i=0;$i<$length;$i++)
         {
             
@@ -231,16 +236,19 @@ $sayfa_sayisi=ceil($row / $sayfa_limiti );
         };
     }
 ?>
+<div class="container">
+    <div class="col-md-2 bg-light" style="float:right; font-weight:bold;">
+    <?php
+    for($i=1;$i<=$sayfa_sayisi;$i++)
+    {
+        echo '<a href="?sayfa='; print $i;  echo'">';
+            print $i;
+        echo '</a>';
+    }
 
-<?php
-for($i=1;$i<=$sayfa_sayisi;$i++)
-{
-    echo '<a href="?sayfa='; print $i;  echo'">';
-        print $i;
-    echo '</a>';
-}
-
-?>
+    ?>
+    </div>
+</div>
 
 <?php
 include_once 'footer.php';

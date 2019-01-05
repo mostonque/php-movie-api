@@ -2,7 +2,7 @@
 session_start();
 if(!$_SESSION['yonetici_adi'])
 {
-    header('location:../index.php');
+    header('location:../admin/index.php');
 }
 ?>
 <?php
@@ -47,5 +47,5 @@ if($insert){
     print 'HATA! Bu video daha önceden veri tabanına kaydedilmiştir.';
 }
 ?>
-&emsp;&emsp;<a href="../index.php" >ANASAYFA</button> <a href="../cikis.php">[ÇIKIŞ]</a><br>
+&emsp;&emsp;<a href="../admin/index.php" >ANASAYFA</button> <a href="../cikis.php">[ÇIKIŞ]</a><br>
 

@@ -18,7 +18,7 @@ if(isset($_POST['submit']))
     }else
     {
         $_SESSION['yonetici_adi'] = $uye['yonetici_adi'];
-        header('location:./admin/admin.php');
+        header('location:./admin.php');
     }
 
 }
@@ -33,17 +33,19 @@ if(isset($hata))
 ?>
 
 
-
-<form action="" method="POST">
-Yönetici adı: <br>
-<input type="text" name="yonetici_adi">
-<hr>
-Şifre: <br>
-<input type="password" name="sifre">
-<input type="hidden" name="submit" value="1">
-<button type="submit">Gönder</button>
-
-</form>
-
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-4" style="margin: 10% 0% 0% 42%; background-color:red; ">        
+            <form action="" method="POST">
+            Yönetici adı: <br>
+            <input type="text" name="yonetici_adi">
+            <br>
+            Şifre: <br>
+            <input type="password" name="sifre">
+            <input type="hidden" name="submit" value="1">
+            <button type="submit" >Gönder</button>
+            </form>
+        </div>
+    </div>
+</div>
 

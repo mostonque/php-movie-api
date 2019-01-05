@@ -63,15 +63,22 @@ function dizideBul($array,$anahtar)
 
 <div class="container-fluid">
     <div class="row" style="margin:2% 0% 0% 0%">    
-        <div class="container bg-light" >
+        <div class="container bg-light" style="display:inline-block" >
         <form style="margin:1% 0% 1% 0%;" action="" method="get">
-            <div class="input-group col-md-5 ml-auto mr-auto">
-                <input type="text"  name="search"  class="form-control" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">Ara</button>
+            <div class="col-md-12" style="display: inline-flex;">   
+                <div class="input-group col-md-5 ml-auto mr-auto">
+                    <input type="text"  name="search"  class="form-control" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Ara</button>
+                    </div>
+                </div>
+        
+         <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
+              
+                <div>
+                    <a class="btn btn-warning" href="../admin/">Admin Panel</a>
                 </div>
             </div>
-            <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
         </form>
         </div>
     </div>
@@ -80,13 +87,13 @@ function dizideBul($array,$anahtar)
 
 <div class="container">
   <div class="row">
-  <div class="col-md-12" style="height:5%; color:green; font-weight:bold;">
-    <?php isset($size)&& $size!=0?print"<p>".$size.' Sonuç bulundu.</p>':$size=0 ?>
-  </div>
+  
      <?php
 if(isset($_GET['search'])&&!empty($_GET['search']))
 {
-
+    echo '<div class="col-md-12" style="height:5%; color:green; font-weight:bold;">';
+     isset($size)&& $size!=0?print"<p>".$size.' Sonuç bulundu.</p>':$size=0 ;
+    echo '</div>';
         if(isset($dizi) && !empty($dizi))
     {    
 
@@ -155,9 +162,7 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
 
 <div class="container">
   <div class="row">
-  <div class="col-md-12" style="height:5%; color:green; font-weight:bold;">
-  <?php isset($length)&& $length!=0 && empty($_GET['search']) ? print $row.' tane videodan '. ($sayfa+1).'--'.($sayfa_limiti+$sayfa) .' arası video listeleniyor.':$length=0 ?>
-  </div>
+  
      <?php
 
     if(!isset($_GET['search']) || empty($_GET['search']) )
@@ -184,6 +189,10 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
     $dbsearch= $sorgu->fetchAll(PDO::FETCH_ASSOC);
     $length=sizeof($dbsearch);
     $sayfa_sayisi=ceil($row / $sayfa_limiti );
+        
+        echo '<div class="col-md-12" style="height:5%; color:green; font-weight:bold;">';
+        isset($length)&& $length!=0 && empty($_GET['search']) ? print $row.' tane videodan '. ($sayfa+1).'--'.($sayfa+$length) .' arası video listeleniyor.':$length=0 ;
+        echo '</div>';
 
         for($i=0;$i<$length;$i++)
         {

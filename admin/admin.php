@@ -2,7 +2,7 @@
 session_start();
 if(!$_SESSION['yonetici_adi'])
 {
-    header('location:../index.php');
+    header('location:index.php');
 }
 ?>
 

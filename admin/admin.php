@@ -12,7 +12,7 @@ require_once 'adminController.php';
 ?>
 
 <?php
-require_once '../header-footer/content.php';
+    require_once '../header-footer/content.php';
 ?>
     
 

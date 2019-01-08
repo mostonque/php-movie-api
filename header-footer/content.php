@@ -1,10 +1,24 @@
+<?php
+if(isset($_POST['ara']) && !empty($_POST['videoLink']) && strlen($_POST['videoLink'])==43)
+{
+    $jq="<script type='text/javascript'>
+    $(()=>{
+        $('#alan').css('display','block')
+    });    
+
+</script>";
+    echo $jq;
+}
+?>
+
+
 <div class="container-fluid " style="background-color:#145558">
         <div class="col-md-3 d-inline-block" style="float:none; margin:1% 1% 1% 34%; text-align:center; background-color:#dfe8e8; padding:0.3%"> 
                 <form action="" method="post">
                     Youtube Video Link'ini Giriniz: <br>
                     <input style="width:67%" type="text" id="videoLink" name="videoLink" autocomplete="off" value="<?php isset($_SESSION['videoLink'])?print $_SESSION['videoLink'] : $_SESSION['videoLink']=""; ?>" />
                    
-                    <button style="margin:0% 2% 0% 2%" class="btn btn-info"  name="ara" type="submit">ARA</button>| <a href="../cikis.php">[ÇIKIŞ]</a> <br>
+                    <button style="margin:0% 2% 0% 2%" class="btn btn-info"  name="ara" id="ara" type="submit">ARA</button>| <a href="../cikis.php">[ÇIKIŞ]</a> <br>
                     <?php
                         isset($hata) ? print $hata : $hata="";
                     ?>
@@ -15,9 +29,12 @@
                 <button class="btn btn-warning " name="kayit" type="submit" >KAYDET</button> 
                 </form>
             </div>
+            <div class="col-md-1 d-inline-block" style="background-color:#dfe8e8;color:green; text-align:center;margin-left:25%; ">
+                <a><span style="color:darkred;"><small><b>Hoşgeldin:</b></small> </span><br> <b> <?php print_r(Mb_strtoupper($_SESSION['yonetici_adi']));?></b></a>
+            </div>
 </div>
   
-<div id="alan" >
+<div id="alan" style="display: none;">
 
 <div class="container-fluid videoAlan" >
     <div class="col-md-6 d-inline-block " >
@@ -80,5 +97,3 @@
 </div>
 </div>
 
-
-<div class="col-md-6 offset-3" id="dbdata" style="background-color: red; color: white;">

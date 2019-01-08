@@ -22,14 +22,27 @@ include_once '../db/baglan.php';
 
 if(isset($_GET['search'])&&!empty($_GET['search']))
 {
-   $search=dataControl($_GET['search']);
-   $veri = $db->prepare("SELECT * FROM `videolar` WHERE title LIKE '%$search%'"); 
+    $sayfa="";
+    $search=dataControl($_GET['search']);
+    if(isset($_GET['sayfalar']))
+    {
+        $sayfa=$_GET['sayfalar'];
+    }
+    $sayfa_limiti=3;
+    $row=$db->query("SELECT * FROM videolar WHERE title LIKE '%$search%'")->rowCount();
+    if(!isset($sayfa) || $sayfa=="" )
+    {
+        $sayfa=0;
+    }else{
+        $sayfa=($sayfa*$sayfa_limiti)-$sayfa_limiti;
+    }
+    var_dump($row);
+   $veri = $db->prepare("SELECT * FROM `videolar` WHERE title LIKE '%$search%' LIMIT " . $sayfa . "," . $sayfa_limiti); 
    $veri->execute();
    $dizi = $veri->fetchAll(PDO::FETCH_ASSOC);
    $size=sizeof($dizi);
-}
-
-
+   $sayfa_sayisi2=ceil($row / $sayfa_limiti );
+};
 
 
 function dataControl($data)
@@ -57,6 +70,8 @@ function dizideBul($array,$anahtar)
     
     return "ARRAYDE <u> $anahtar </u> ANAHTARI BULUNAMADI! ";
 }
+
+
  
 ?>
 
@@ -68,11 +83,11 @@ function dizideBul($array,$anahtar)
             <div class="col-md-12" style="display: inline-flex;">   
                 <div class="input-group col-md-5 ml-auto mr-auto">
                     <input type="text"  name="search"  class="form-control" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
+                    <input type="hidden" name="sayfalar"  class="form-control" value="">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit">Ara</button>
                     </div>
                 </div>
-        
          <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
               
                 <div>
@@ -91,9 +106,9 @@ function dizideBul($array,$anahtar)
      <?php
 if(isset($_GET['search'])&&!empty($_GET['search']))
 {
-    echo '<div class="col-md-12" style="height:5%; color:green; font-weight:bold;">';
-     isset($size)&& $size!=0?print"<p>".$size.' Sonuç bulundu.</p>':$size=0 ;
-    echo '</div>';
+        echo '<div class="col-md-12" style="height:5%; color:green; font-weight:bold;">';
+        isset($size)&& $size!=0 && !empty($_GET['search']) ? print $row.' tane videodan '. ($sayfa+1).'--'.($sayfa+$size) .' arası video listeleniyor.':$size=0 ;
+        echo '</div>';
         if(isset($dizi) && !empty($dizi))
     {    
 
@@ -153,8 +168,33 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
     }
 }
 ?>
+
   </div>
 </div>
+
+<div class="container">
+    <div class="col-md-2 bg-light" style="float:right; font-weight:bold;">
+    <?php
+        if(isset($sayfa_sayisi2))
+        {
+            $sayfa_sayisi2=$sayfa_sayisi2;
+        }else{
+            $sayfa_sayisi2=0;
+        }
+
+
+    for($i=1;$i<=$sayfa_sayisi2;$i++)
+    {
+        echo '<a href="content.php?search=';isset($_GET['search'])? print $_GET['search']:$_GET['search']==""; echo'&sayfalar='; print $i;  echo'">';
+            print $i;
+        echo '</a>';
+    }
+
+    ?>
+    </div>
+</div>
+
+
 
 
 
@@ -248,6 +288,14 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
 <div class="container">
     <div class="col-md-2 bg-light" style="float:right; font-weight:bold;">
     <?php
+        if(isset($sayfa_sayisi))
+        {
+            $sayfa_sayisi=$sayfa_sayisi;
+        }else{
+            $sayfa_sayisi=0;
+        }
+
+
     for($i=1;$i<=$sayfa_sayisi;$i++)
     {
         echo '<a href="?sayfa='; print $i;  echo'">';

@@ -5,7 +5,7 @@ require '../users/users.php';
 ?>
 <?php
 
-if(isset($_SESSION['yonetici_adi'])&& $_SESSION['yonetici_adi']==$uye['yonetici_adi'])
+if(isset($_SESSION['yonetici_adi']))
 {
     header('location:admin.php');
 }else{

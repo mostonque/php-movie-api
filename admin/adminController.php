@@ -26,21 +26,23 @@ if(!$_SESSION['yonetici_adi'])
             $urlid=videoİd($url); 
             $urlid=substr($urlid,2,11);
             $link='https://www.googleapis.com/youtube/v3/videos?id='.$urlid.'&key='.$apiKey.'&fields=items(id,snippet(channelId,title,thumbnails,description,categoryId),statistics)&part=snippet,statistics';
-            $link=json_decode(file_get_contents($link),true);     
+            $link=json_decode(file_get_contents($link),true);
+            
         };
-        if(isset($link))
+        if(isset($link) && sizeof($link['items'])===1)
         {
-            $_SESSION['videoLink']=dataControl($_POST['videoLink']);
-            $_SESSION['channelID']=dataControl(arraydeBul($link,'channelId'));
-            $_SESSION['videoId']=dataControl(arraydeBul($link,'id'));
-            $_SESSION['title']=dataControl(arraydeBul($link,'title'));
-            $_SESSION['aciklama']=dataControl(arraydeBul($link,'description'));
-            $_SESSION['imgUrl']=dataControl($link['items'][0]['snippet']['thumbnails']['high']['url']);
-            $_SESSION['goruntulenme_sayisi']=dataControl($link['items'][0]['statistics']['viewCount']);
-            $_SESSION['like_sayisi']=dataControl($link['items'][0]['statistics']['likeCount']);
-            $_SESSION['disLike_sayisi']=dataControl($link['items'][0]['statistics']['dislikeCount']);
-            $_SESSION['yorum_sayisi']=dataControl($link['items'][0]['statistics']['commentCount']);
+            $_SESSION['videoLink']=$_POST['videoLink'];
+            $_SESSION['channelID']=arraydeBul($link,'channelId');
+            $_SESSION['videoId']=arraydeBul($link,'id');
+            $_SESSION['title']=arraydeBul($link,'title');
+            $_SESSION['imgUrl']=$link['items'][0]['snippet']['thumbnails']['high']['url'];
+            $_SESSION['aciklama']=arraydeBul($link,'description');
+            $_SESSION['goruntulenme_sayisi']=$link['items'][0]['statistics']['viewCount'];
+            $_SESSION['like_sayisi']=$link['items'][0]['statistics']['likeCount'];
+            $_SESSION['disLike_sayisi']=$link['items'][0]['statistics']['dislikeCount'];
+            $_SESSION['yorum_sayisi']=$link['items'][0]['statistics']['commentCount'];
         }
+
     }elseif(isset($_POST['kayit']))
     {
        if(isset($_SESSION['videoId']))
@@ -66,19 +68,20 @@ if(!$_SESSION['yonetici_adi'])
                 
                 foreach($array as $key=>$val)
                 {
-                if($key===$anahtar)
-                {
-                    return $val;
-                }elseif(is_array($val))
-                {
-                    $t=arraydeBul($val,$anahtar);
-                    return $t;
-                }
-                
+                    if($key===$anahtar)
+                    {
+                        return $val;
+                    }elseif(is_array($val))
+                    {
+                        $t=arraydeBul($val,$anahtar);
+                        return $t;
+                    }
+                    
                 }              
             
-            return "ARRAYDE <u> $anahtar </u> ANAHTARI BULUNAMADI! ";
-        }
+            return FALSE;
+          
+        };
         
         function videoİd ($url)
         {

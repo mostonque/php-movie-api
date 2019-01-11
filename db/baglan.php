@@ -1,9 +1,9 @@
 
 <?php
 $host='localhost';
-$dbname='ytvideolar';
-$ID='serhat';
-$pw='UwpeDNMD8oysaWa1';
+$dbname='id8433861_ytvideolar';
+$ID='id8433861_serhat';
+$pw='A4techviole.,';
     try {
         $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $ID, $pw);
    }catch ( PDOException $e ){

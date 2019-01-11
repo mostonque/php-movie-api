@@ -36,7 +36,6 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
     }else{
         $sayfa=($sayfa*$sayfa_limiti)-$sayfa_limiti;
     }
-    var_dump($row);
    $veri = $db->prepare("SELECT * FROM `videolar` WHERE title LIKE '%$search%' LIMIT " . $sayfa . "," . $sayfa_limiti); 
    $veri->execute();
    $dizi = $veri->fetchAll(PDO::FETCH_ASSOC);
@@ -100,7 +99,7 @@ function dizideBul($array,$anahtar)
     
 </div>
 
-<div class="container">
+<div class="container mt-4">
   <div class="row">
   
      <?php
@@ -168,31 +167,36 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
     }
 }
 ?>
+        <div class="container">
+            <div class="col " style="float:right; font-weight:bold;">
+            <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end" style="height: 38px;">
+        
+            <?php
+                if(isset($sayfa_sayisi2))
+                {
+                    $sayfa_sayisi2=$sayfa_sayisi2;
+                }else{
+                    $sayfa_sayisi2=0;
+                }
+
+
+            for($i=1;$i<=$sayfa_sayisi2;$i++)
+            {
+                echo'<li class="page-item"><a class="page-link mt-3 mb-0" href="content.php?search=';isset($_GET['search'])? print $_GET['search']:$_GET['search']==""; echo'&sayfalar=';print $i; echo'">'; print $i; echo'</a> </li>';
+            
+            }
+
+            ?>
+            
+        </ul>
+        </nav>
+            </div>
+        </div>
 
   </div>
 </div>
 
-<div class="container">
-    <div class="col-md-2 bg-light" style="float:right; font-weight:bold;">
-    <?php
-        if(isset($sayfa_sayisi2))
-        {
-            $sayfa_sayisi2=$sayfa_sayisi2;
-        }else{
-            $sayfa_sayisi2=0;
-        }
-
-
-    for($i=1;$i<=$sayfa_sayisi2;$i++)
-    {
-        echo '<a href="content.php?search=';isset($_GET['search'])? print $_GET['search']:$_GET['search']==""; echo'&sayfalar='; print $i;  echo'">';
-            print $i;
-        echo '</a>';
-    }
-
-    ?>
-    </div>
-</div>
 
 
 
@@ -200,7 +204,8 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
 
 
 
-<div class="container">
+<div class="container" style="margin-top:-3%" >
+
   <div class="row">
   
      <?php
@@ -286,8 +291,11 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
     }
 ?>
 <div class="container">
-    <div class="col-md-2 bg-light" style="float:right; font-weight:bold;">
-    <?php
+    <div class="col " style="float:right; font-weight:bold;">
+    <nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-end">
+  
+     <?php
         if(isset($sayfa_sayisi))
         {
             $sayfa_sayisi=$sayfa_sayisi;
@@ -298,12 +306,14 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
 
     for($i=1;$i<=$sayfa_sayisi;$i++)
     {
-        echo '<a href="?sayfa='; print $i;  echo'">';
-            print $i;
-        echo '</a>';
+        echo'<li class="page-item"><a class="page-link mt-3 mb-0" href="?sayfa=';print $i;  echo'">'; print $i; echo'</a> </li>';
+     
     }
 
     ?>
+    
+  </ul>
+</nav>
     </div>
 </div>
 

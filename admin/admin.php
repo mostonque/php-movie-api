@@ -1,5 +1,9 @@
 <?php
 session_start();
+?>
+<?php
+
+ob_start();
 if(!$_SESSION['yonetici_adi'])
 {
     header('location:index.php');

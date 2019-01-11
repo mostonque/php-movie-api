@@ -1,10 +1,11 @@
-
 <?php
 session_start();
-require '../users/users.php';
 ?>
 <?php
+error_reporting(E_ALL); ini_set('display_errors', 'On');
 
+ob_start();
+require_once '../users/users.php';
 if(isset($_SESSION['yonetici_adi']))
 {
     header('location:admin.php');

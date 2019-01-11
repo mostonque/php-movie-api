@@ -1,3 +1,4 @@
+
 <style>
 @import url(http://fonts.googleapis.com/css?family=Roboto:400);
 body {
@@ -51,6 +52,7 @@ h4 {
 
 if(isset($_POST['submit']))
 {
+
     $yonetici_adi=$_POST['yonetici_adi'];
     $sifre=$_POST['sifre'];
 
@@ -64,9 +66,12 @@ if(isset($_POST['submit']))
         $query->fetchAll(PDO::FETCH_ASSOC);
         $count=$query->rowCount();
         if($count>0){
-            $_SESSION['yonetici_adi'] = $_POST['yonetici_adi'];
-            $hata='<p style="color:green; text-align:center">GİRİŞ BAŞARILI YÖNLENDİRİLİYORSUNUZ!</p>';
+            
+            $_SESSION['yonetici_adi'] = $yonetici_adi;
+            $basarili='<p style="color:green; text-align:center">GİRİŞ BAŞARILI YÖNLENDİRİLİYORSUNUZ!</p>';
+            
             header("refresh:2;url='./admin.php'");
+           
         }else{
             $hata='Hatalı giriş. Tekrar deneyiniz';
         }
@@ -96,6 +101,9 @@ if(isset($_POST['submit']))
                     if(isset($hata))
                     {
                         echo'<p style="color:red">'; echo $hata;echo'</p>';
+                    }elseif(isset($basarili))
+                    {
+                        echo $basarili;
                     }
                 ?>
             <div class="wrapper">

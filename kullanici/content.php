@@ -79,7 +79,10 @@ function dizideBul($array,$anahtar)
     <div class="row" style="margin:2% 0% 0% 0%">    
         <div class="container bg-light" style="display:inline-block" >
         <form style="margin:1% 0% 1% 0%;" action="" method="get">
-            <div class="col-md-12" style="display: inline-flex;">   
+            <div class="col-md-12" style="display: inline-flex;">
+                  <div>
+                    <a class="btn btn-warning" href="../admin/">Admin Panel</a>
+                </div>   
                 <div class="input-group col-md-5 ml-auto mr-auto">
                     <input type="text"  name="search"  class="form-control" value="<?php isset($_GET['search']) && $_GET['search']!="" ? print $_GET['search'] : $a="Ara"; ?>" placeholder="<?php isset($a) ? print $a : print "" ;?>" autocomplete="off" >
                     <input type="hidden" name="sayfalar"  class="form-control" value="">
@@ -87,10 +90,10 @@ function dizideBul($array,$anahtar)
                         <button class="btn btn-outline-secondary" type="submit">Ara</button>
                     </div>
                 </div>
-         <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
+                 <?php isset($hata) ? print '<p style="color:red; font-weight:bold">'.$hata.'</p>' : $hata=""; ?>
               
                 <div>
-                    <a class="btn btn-warning" href="../admin/">Admin Panel</a>
+                    <a class="btn btn-warning" href="../mail-gonder/mail-form.php">Mail Gönder</a>
                 </div>
             </div>
         </form>
@@ -137,7 +140,7 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
                             print 'DETAY';  
                         echo '</button>';
                     echo '</form>';
-                    echo '<table class="table bg-secondary table-sm" style="color:#ffc107; font-size:12px; text-align:center; width:83%;margin-top:1%;">';
+                    echo '<table class="table bg-secondary table-sm table-bordered" style="color:#ffc107; font-size:12px; text-align:center; width:83%;margin-top:1%;">';
                     echo '<thead>';
                     echo ' <tr>';
                     echo '<th scope="col">';  print 'İZLENME SAYISI';    echo'</th>';
@@ -148,10 +151,10 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
                             echo '</thead>';
                             echo '<tbody>';
                             echo '<tr>';
-                            echo '<td scope="row">'; isset($izlenme) ? print $izlenme : $izlenme=0;  echo '</th>';
-                            echo '<td>'; isset($izlenme) ? print $likeSayisi : $likeSayisi=0; echo '</td>';
-                            echo '<td>'; isset($dislike) ? print $dislike : $dislike=0; echo '</td>';
-                            echo '<td>';  isset($yorum) ? print $yorum : $yorum=0; echo '</td>';
+                            echo '<td scope="row">'; isset($izlenme) ? print number_format($izlenme) : $izlenme=0;  echo '</th>';
+                            echo '<td>'; isset($izlenme) ? print number_format($likeSayisi) : $likeSayisi=0; echo '</td>';
+                            echo '<td>'; isset($dislike) ? print number_format($dislike) : $dislike=0; echo '</td>';
+                            echo '<td>';  isset($yorum) ? print number_format($yorum) : $yorum=0; echo '</td>';
                             echo '</tr>';
                             echo '</tbody>';
                             echo '</table>';
@@ -266,7 +269,7 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
                             print 'DETAY';  
                         echo '</button>';
                     echo '</form>';
-                    echo '<table class="table bg-secondary table-sm" style="color:#ffc107; font-size:12px; text-align:center; width:83%;margin-top:1%;">';
+                    echo '<table class="table bg-secondary table-sm table-bordered" style="color:#ffc107; font-size:12px; text-align:center; width:83%;margin-top:1%;">';
                     echo '<thead>';
                     echo ' <tr>';
                     echo '<th scope="col">';  print 'İZLENME SAYISI';    echo'</th>';
@@ -277,10 +280,10 @@ if(isset($_GET['search'])&&!empty($_GET['search']))
                             echo '</thead>';
                             echo '<tbody>';
                             echo '<tr>';
-                            echo '<td scope="row">'; isset($izlenme) ? print $izlenme : $izlenme=0;  echo '</th>';
-                            echo '<td>'; isset($izlenme) ? print $likeSayisi : $likeSayisi=0; echo '</td>';
-                            echo '<td>'; isset($dislike) ? print $dislike : $dislike=0; echo '</td>';
-                            echo '<td>';  isset($yorum) ? print $yorum : $yorum=0; echo '</td>';
+                            echo '<td scope="row">'; isset($izlenme) ? print number_format($izlenme) : $izlenme=0;  echo '</th>';
+                            echo '<td>'; isset($izlenme) ? print number_format($likeSayisi) : $likeSayisi=0; echo '</td>';
+                            echo '<td>'; isset($dislike) ? print number_format($dislike) : $dislike=0; echo '</td>';
+                            echo '<td>';  isset($yorum) ? print number_format($yorum) : $yorum=0; echo '</td>';
                             echo '</tr>';
                             echo '</tbody>';
                             echo '</table>';

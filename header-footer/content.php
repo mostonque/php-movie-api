@@ -48,7 +48,7 @@ if(isset($_POST['ara']) && !empty($_POST['videoLink']) && strlen($_POST['videoLi
         </div>
         <div class="col-md-12" >
                 
-            <table class="table table-light table-sm table-striped" style="text-align: center;">
+            <table class="table table-light table-sm table-striped table-bordered" style="text-align: center;">
                 <thead>
                 <tr>
                     <th scope="col">İzlenme sayısı</th>
@@ -59,10 +59,10 @@ if(isset($_POST['ara']) && !empty($_POST['videoLink']) && strlen($_POST['videoLi
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope="row"> <?php isset($_SESSION['goruntulenme_sayisi']) ? print $_SESSION['goruntulenme_sayisi'] :$_SESSION['goruntulenme_sayisi']=""; ?> </th>
-                        <td><?php isset($_SESSION['like_sayisi'])? print $_SESSION['like_sayisi']  : $_SESSION['like_sayisi']="";?></td>
-                        <td><?php isset($_SESSION['disLike_sayisi'])? print $_SESSION['disLike_sayisi'] : $_SESSION['disLike_sayisi']="";?></td>
-                        <td><?php isset($_SESSION['yorum_sayisi'])? print $_SESSION['yorum_sayisi'] : $_SESSION['yorum_sayisi']="";?></td>
+                        <td scope="row"> <?php isset($_SESSION['goruntulenme_sayisi']) ? print print number_format($_SESSION['goruntulenme_sayisi']) :$_SESSION['goruntulenme_sayisi']=""; ?> </th>
+                        <td><?php isset($_SESSION['like_sayisi'])? print number_format($_SESSION['like_sayisi'])  : $_SESSION['like_sayisi']="";?></td>
+                        <td><?php isset($_SESSION['disLike_sayisi'])? print print number_format($_SESSION['disLike_sayisi']) : $_SESSION['disLike_sayisi']="";?></td>
+                        <td><?php isset($_SESSION['yorum_sayisi'])? print print number_format($_SESSION['yorum_sayisi']) : $_SESSION['yorum_sayisi']="";?></td>
                     </tr>
                 </tbody>
             </table>
